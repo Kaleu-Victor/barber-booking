@@ -1,0 +1,148 @@
+.service-selector {
+  width: 100%;
+}
+
+.service-selector__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  margin-bottom: 28px;
+}
+
+.service-selector__header > span {
+  color: var(--color-primary);
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.service-selector__header p {
+  margin-bottom: 6px;
+
+  color: var(--color-primary);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.service-selector__header h2 {
+  color: var(--color-text);
+
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.service-selector__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-option {
+  width: 100%;
+
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  background: var(--color-surface);
+
+  color: var(--color-text);
+
+  text-align: left;
+
+  transition:
+    border-color var(--transition-normal),
+    background var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.service-option:hover {
+  border-color: rgba(201, 162, 39, 0.4);
+
+  background: var(--color-surface-light);
+
+  transform: translateY(-2px);
+}
+
+.service-option--selected {
+  border-color: var(--color-primary);
+
+  background: rgba(201, 162, 39, 0.07);
+}
+
+.service-option__info {
+  min-width: 0;
+}
+
+.service-option__info h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.service-option__info p {
+  margin-top: 7px;
+
+  color: var(--color-text-muted);
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.service-option__info > span {
+  display: block;
+
+  margin-top: 10px;
+
+  color: #666;
+
+  font-size: 10px;
+}
+
+.service-option__right {
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.service-option__right strong {
+  color: var(--color-primary);
+
+  font-size: 16px;
+}
+
+.service-option__check {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+
+  color: var(--color-primary);
+
+  font-size: 13px;
+}
+
+.service-option--selected .service-option__check {
+  border-color: var(--color-primary);
+
+  background: var(--color-primary);
+  color: #0b0b0b;
+}
