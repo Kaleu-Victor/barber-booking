@@ -1,28 +1,6 @@
-import './ServiceSelector.css'
+import { services } from '../../data/services'
 
-const services = [
-  {
-    id: 1,
-    name: 'Corte Tradicional',
-    description: 'Corte personalizado de acordo com seu estilo.',
-    price: 'R$ 30',
-    duration: '30 min',
-  },
-  {
-    id: 2,
-    name: 'Corte + Barba',
-    description: 'Corte completo acompanhado de acabamento da barba.',
-    price: 'R$ 45',
-    duration: '50 min',
-  },
-  {
-    id: 3,
-    name: 'Barba',
-    description: 'Modelagem e acabamento para sua barba.',
-    price: 'R$ 20',
-    duration: '20 min',
-  },
-]
+import './ServiceSelector.css'
 
 function ServiceSelector({ selectedService, onSelect }) {
   return (
@@ -38,14 +16,17 @@ function ServiceSelector({ selectedService, onSelect }) {
 
       <div className="service-selector__list">
         {services.map((service) => {
-          const isSelected = selectedService?.id === service.id
+          const isSelected =
+            selectedService?.id === service.id
 
           return (
             <button
               type="button"
               key={service.id}
               className={`service-option ${
-                isSelected ? 'service-option--selected' : ''
+                isSelected
+                  ? 'service-option--selected'
+                  : ''
               }`}
               onClick={() => onSelect(service)}
             >
@@ -54,7 +35,7 @@ function ServiceSelector({ selectedService, onSelect }) {
 
                 <p>{service.description}</p>
 
-                <span>{service.duration}</span>
+                <span>{service.duration} min</span>
               </div>
 
               <div className="service-option__right">

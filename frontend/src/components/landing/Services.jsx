@@ -1,32 +1,13 @@
 import { Link } from 'react-router-dom'
-import './Services.css'
 
-const services = [
-  {
-    name: 'Corte Tradicional',
-    description: 'Corte personalizado de acordo com seu estilo.',
-    price: 'R$ 30',
-    duration: '30 min',
-  },
-  {
-    name: 'Corte + Barba',
-    description: 'Corte completo acompanhado de acabamento da barba.',
-    price: 'R$ 45',
-    duration: '50 min',
-  },
-  {
-    name: 'Barba',
-    description: 'Modelagem e acabamento para manter sua barba impecável.',
-    price: 'R$ 20',
-    duration: '20 min',
-  },
-]
+import { services } from '../../data/services'
+
+import './Services.css'
 
 function Services() {
   return (
     <section className="services" id="servicos">
       <div className="services__container">
-
         <div className="services__header fade-up">
           <span className="services__eyebrow">
             SERVIÇOS
@@ -47,8 +28,10 @@ function Services() {
           {services.map((service, index) => (
             <article
               className="service-card fade-up"
-              key={service.name}
-              style={{ animationDelay: `${index * 0.1}s` }}
+              key={service.id}
+              style={{
+                animationDelay: `${index * 0.1}s`,
+              }}
             >
               <div className="service-card__top">
                 <div>
@@ -72,7 +55,7 @@ function Services() {
 
               <div className="service-card__bottom">
                 <span className="service-card__duration">
-                  Aproximadamente {service.duration}
+                  Aproximadamente {service.duration} min
                 </span>
 
                 <Link
@@ -85,7 +68,6 @@ function Services() {
             </article>
           ))}
         </div>
-
       </div>
     </section>
   )
