@@ -1,6 +1,12 @@
+import { useState } from 'react'
+import { initialScheduleConfig } from '../../data/scheduleConfig'
+import ScheduleModal from '../../components/dashboard/ScheduleModal'
 import './Dashboard.css'
 
 function Dashboard() {
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false)
+  const [scheduleConfig, setScheduleConfig] = useState(initialScheduleConfig)
+
   return (
     <main className="dashboard">
       <div className="dashboard__container">
@@ -122,6 +128,7 @@ function Dashboard() {
           <button
             type="button"
             className="dashboard__schedule-button"
+            onClick={() => setIsScheduleModalOpen(true)}
           >
             Configurar horários
             <span>→</span>
@@ -129,6 +136,17 @@ function Dashboard() {
         </section>
 
       </div>
+
+      {isScheduleModalOpen && (
+        <ScheduleModal
+          isOpen={isScheduleModalOpen}
+          onClose={() => setIsScheduleModalOpen(false)}
+          scheduleConfig={scheduleConfig}
+          onSave={(newConfig) => {
+            setScheduleConfig(newConfig)
+          }}
+        />
+      )}
     </main>
   )
 }

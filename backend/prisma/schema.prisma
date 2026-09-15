@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Barber {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  services     Service[]
+  workingHours WorkingHour[]
+  blockedDates BlockedDate[]
+  appointments Appointment[]
+}
+
+model Service {
+  id              Int     @id @default(autoincrement())
+  barberId        Int
+  name            String
+  description     String
+  durationMinutes Int
+  priceInCents    Int
+  isActive        Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  barber       Barber        @relation(fields: [barberId], references: [id])
+  appointments Appointment[]
+}
+
+// Horário semanal recorrente — um registro por dia da semana por barbeiro
+model WorkingHour {
+  id        Int     @id @default(autoincrement())
+  barberId  Int
+  dayOfWeek Int     // 0 = Dom, 1 = Seg, ..., 6 = Sáb
+  enabled   Boolean @default(true)
+  startTime String  // "HH:MM" — início do envelope do dia
+  endTime   String  // "HH:MM" — fim do envelope do dia (exclusivo)
+
+  updatedAt DateTime @updatedAt
+
+  barber Barber        @relation(fields: [barberId], references: [id])
+  breaks BreakPeriod[]
+
+  @@unique([barberId, dayOfWeek])
+}
+
+// Intervalos de pausa dentro de um dia de funcionamento
+// Semântica de intervalo semiaberto: [startTime, endTime)
+// Ex.: pausa 12:00–13:00 bloqueia 12:00 e libera 13:00
+model BreakPeriod {
+  id            Int    @id @default(autoincrement())
+  workingHourId Int
+  startTime     String // "HH:MM" (inclusivo)
+  endTime       String // "HH:MM" (exclusivo)
+
+  workingHour WorkingHour @relation(fields: [workingHourId], references: [id], onDelete: Cascade)
+}
+
+// Bloqueio de dia inteiro (feriados, férias, etc.)
+// Bloqueios parciais por horário são escopo futuro
+model BlockedDate {
+  id       Int      @id @default(autoincrement())
+  barberId Int
+  date     DateTime // meia-noite UTC do dia bloqueado
+  reason   String?
+
+  barber Barber @relation(fields: [barberId], references: [id])
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  whatsapp  String
+  createdAt DateTime @default(now())
+
+  appointments Appointment[]
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Appointment {
+  id        Int               @id @default(autoincrement())
+  barberId  Int
+  serviceId Int
+  clientId  Int
+  date      DateTime          // início do atendimento (UTC)
+  endsAt    DateTime          // fim calculado = date + durationMinutes
+  status    AppointmentStatus @default(CONFIRMED)
+  createdAt DateTime          @default(now())
+
+  barber  Barber  @relation(fields: [barberId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+  client  Client  @relation(fields: [clientId], references: [id])
+
+  // Impede dois agendamentos com exatamente o mesmo horário de início
+  // A prevenção de sobreposição de intervalos é feita na camada de serviço
+  // com isolamento SERIALIZABLE + verificação de overlap antes do INSERT
+  @@unique([barberId, date])
+}
