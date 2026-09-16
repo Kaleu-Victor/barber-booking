@@ -15,15 +15,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "cors": "^2.8.6",
     "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "pg": "^8.23.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",
-    "prisma": "^8.0.0-rc.15"
+    "prisma": "^7.10.0"
   }
 }
