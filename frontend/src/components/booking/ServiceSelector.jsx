@@ -1,8 +1,35 @@
-import { services } from '../../data/services'
-
+import { useState, useEffect } from 'react'
+import { getServices } from '../../services/servicesApi'
 import './ServiceSelector.css'
 
 function ServiceSelector({ selectedService, onSelect }) {
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    async function loadServices() {
+      try {
+        const data = await getServices()
+        // formata o dado para o padrão visual do componente
+        const formattedData = data.map(service => ({
+          ...service,
+          price: `R$ ${(service.priceInCents / 100).toFixed(0)}`,
+          duration: service.durationMinutes
+        }))
+        setServices(formattedData)
+      } catch (err) {
+        setError('Não foi possível carregar os serviços.')
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadServices()
+  }, [])
+
+  if (loading) return <div className="service-selector"><p>Carregando serviços...</p></div>
+  if (error) return <div className="service-selector"><p className="error">{error}</p></div>
+
   return (
     <div className="service-selector">
       <div className="service-selector__header">

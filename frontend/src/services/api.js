@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 export async function fetchApi(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`
@@ -10,11 +10,18 @@ export async function fetchApi(endpoint, options = {}) {
 
   const response = await fetch(url, { ...options, headers })
 
-  const data = await response.json()
-
   if (!response.ok) {
-    throw new Error(data.error || 'Erro na requisição')
+    let errorMsg = 'Erro na requisição'
+    try {
+      const errorData = await response.json()
+      errorMsg = errorData.error || errorMsg
+    } catch (e) {
+      // ignore json parse error
+    }
+    throw new Error(errorMsg)
   }
+
+  const data = await response.json()
 
   return data
 }

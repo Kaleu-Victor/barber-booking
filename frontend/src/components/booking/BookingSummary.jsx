@@ -7,6 +7,7 @@ function BookingSummary({
   name,
   whatsapp,
   onConfirm,
+  isSubmitting,
 }) {
   function formatDate(date) {
     if (!date) return ''
@@ -71,9 +72,10 @@ function BookingSummary({
         type="button"
         className="booking-summary__button"
         onClick={onConfirm}
+        disabled={isSubmitting}
       >
-        Confirmar agendamento
-        <span>→</span>
+        {isSubmitting ? 'Confirmando...' : 'Confirmar agendamento'}
+        {!isSubmitting && <span>→</span>}
       </button>
 
       <p className="booking-summary__notice">
