@@ -15,7 +15,7 @@ app.use(express.json())
 
 // Configuração das rotas
 app.use('/api/services', servicesRoutes)
-app.use('/api/schedule', scheduleRoutes)
+app.use('/api/working-hours', scheduleRoutes)
 app.use('/api/availability', availabilityRoutes)
 app.use('/api/appointments', appointmentsRoutes)
 

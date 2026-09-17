@@ -74,12 +74,12 @@
 
 .dashboard__overview {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
 }
 
 .dashboard-card {
-  padding: 20px;
+  padding: 16px;
 
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -89,7 +89,7 @@
 
 .dashboard-card span {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 
   color: var(--color-text-muted);
   font-size: 9px;
@@ -99,7 +99,7 @@
 
 .dashboard-card strong {
   color: var(--color-text);
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .dashboard__section {
@@ -108,11 +108,16 @@
 
 .dashboard__section-header {
   display: flex;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 20px;
+  gap: 12px;
 
   margin-bottom: 20px;
+}
+
+.dashboard__section-header > div {
+  flex: 1 1 min-content;
 }
 
 .dashboard__section-header span {
@@ -127,12 +132,14 @@
 
 .dashboard__section-header h2 {
   color: var(--color-text);
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.1;
+  word-break: break-word;
 }
 
 .dashboard__date-button {
   padding: 9px 12px;
+  white-space: nowrap;
 
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -152,10 +159,10 @@
 
 .appointment-card {
   display: grid;
-  grid-template-columns: 65px 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 
-  padding: 18px;
+  padding: 16px;
 
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -165,24 +172,25 @@
 
 .appointment-card__time {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
 .appointment-card__time strong {
   color: var(--color-primary);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .appointment-card__time span {
   color: #666;
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .appointment-card__info {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -193,11 +201,12 @@
 
 .appointment-card__info span {
   color: var(--color-text-muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .appointment-card__status {
-  grid-column: 2;
+  justify-self: flex-start;
+  margin-top: 4px;
 
   color: #7fa878;
   font-size: 9px;
@@ -261,6 +270,28 @@
     gap: 16px;
   }
 
+  .dashboard-card {
+    padding: 20px;
+  }
+
+  .dashboard-card span {
+    font-size: 9px;
+    margin-bottom: 12px;
+  }
+
+  .dashboard-card strong {
+    font-size: 28px;
+  }
+
+  .dashboard__section-header {
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+
+  .dashboard__section-header h2 {
+    font-size: 24px;
+  }
+
   .dashboard__section {
     margin-top: 55px;
   }
@@ -268,13 +299,92 @@
   .appointment-card {
     grid-template-columns: 100px 1fr auto;
     align-items: center;
+    gap: 16px;
+  }
+
+  .appointment-card__time {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
   }
 
   .appointment-card__status {
-    grid-column: auto;
+    justify-self: auto;
+    margin-top: 0;
   }
 
   .dashboard__schedule-button {
     max-width: 360px;
   }
 }
+
+/* ── Seletor de data (label + input nativo oculto) ───────────── */
+.dashboard__date-label {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dashboard__date-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* ── Estados visuais de feedback ─────────────────────────────── */
+.dashboard__feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  padding: 36px 20px;
+
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.dashboard__feedback--error {
+  border-color: rgba(220, 80, 80, 0.4);
+  color: #e07070;
+}
+
+.dashboard__feedback-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dashboard__retry-button {
+  margin-top: 6px;
+  padding: 7px 16px;
+
+  border: 1px solid rgba(220, 80, 80, 0.5);
+  border-radius: 999px;
+
+  background: transparent;
+  color: #e07070;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.dashboard__retry-button:hover {
+  background: rgba(220, 80, 80, 0.1);
+}
+
+/* ── Badges de status ─────────────────────────────────────────── */
+.status--confirmed { color: #7fa878; }
+.status--pending   { color: #c9a227; }
+.status--done      { color: #5b9bd5; }
+.status--cancelled { color: #b05050; }

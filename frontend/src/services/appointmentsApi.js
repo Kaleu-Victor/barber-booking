@@ -8,7 +8,23 @@ export async function createAppointment(appointmentData) {
   return response.data
 }
 
-export async function getAppointments() {
-  const response = await fetchApi('/appointments')
+/**
+ * Lista agendamentos, podendo filtrar por barbeiro e/ou data (YYYY-MM-DD).
+ * @param {{ barberId?: number, date?: string }} params
+ */
+export async function getAppointments({ barberId = 1, date } = {}) {
+  const query = new URLSearchParams({ barberId })
+  if (date) query.set('date', date)
+  const response = await fetchApi(`/appointments?${query.toString()}`)
+  return response.data
+}
+
+/**
+ * Busca as métricas agregadas para o topo do Dashboard.
+ * @param {{ barberId?: number }} params
+ */
+export async function getAppointmentMetrics({ barberId = 1 } = {}) {
+  const query = new URLSearchParams({ barberId })
+  const response = await fetchApi(`/appointments/metrics?${query.toString()}`)
   return response.data
 }
