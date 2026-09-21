@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { initialScheduleConfig } from '../../data/scheduleConfig'
 import ScheduleModal from '../../components/dashboard/ScheduleModal'
-import { getAppointments, getAppointmentMetrics } from '../../services/appointmentsApi'
+import { getAppointments, getAppointmentMetrics, updateAppointmentStatus } from '../../services/appointmentsApi'
 import { getSchedule, updateSchedule } from '../../services/scheduleApi'
 import './Dashboard.css'
 
@@ -43,7 +43,7 @@ const STATUS_MAP = {
   CANCELLED: { label: 'Cancelado',  cls: 'status--cancelled' },
 }
 
-function AppointmentCard({ appointment }) {
+function AppointmentCard({ appointment, onUpdateStatus, isUpdating }) {
   const startTime = formatTime(appointment.date)
   const duration  = appointment.service?.durationMinutes ?? 0
   const durationLabel = duration ? `${duration} min` : '—'
@@ -63,9 +63,46 @@ function AppointmentCard({ appointment }) {
         <span>{serviceName}</span>
       </div>
 
-      <span className={`appointment-card__status ${statusInfo.cls}`}>
-        {statusInfo.label}
-      </span>
+      <div className="appointment-card__actions">
+        {appointment.status === 'CONFIRMED' ? (
+          <>
+            <button
+              className="action-btn action-btn--complete"
+              disabled={isUpdating}
+              onClick={() => onUpdateStatus(appointment.id, 'COMPLETED')}
+              title="Marcar como concluído"
+            >
+              ✓
+            </button>
+            <button
+              className="action-btn action-btn--cancel"
+              disabled={isUpdating}
+              onClick={() => {
+                if (window.confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                  onUpdateStatus(appointment.id, 'CANCELLED')
+                }
+              }}
+              title="Cancelar atendimento"
+            >
+              ✕
+            </button>
+          </>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span className={`appointment-card__status ${statusInfo.cls}`}>
+              {statusInfo.label}
+            </span>
+            <button
+              className="action-btn action-btn--undo"
+              disabled={isUpdating}
+              onClick={() => onUpdateStatus(appointment.id, 'CONFIRMED')}
+              title="Desfazer e reativar agendamento"
+            >
+              ↺
+            </button>
+          </div>
+        )}
+      </div>
     </article>
   )
 }
@@ -82,6 +119,7 @@ function Dashboard() {
   const [appointments, setAppointments]   = useState([])
   const [apptLoading, setApptLoading]     = useState(false)
   const [apptError, setApptError]         = useState(null)
+  const [updatingApptId, setUpdatingApptId] = useState(null)
 
   // ── Métricas (cards do topo) ──────────────────────────────────────────
   const [metrics, setMetrics]             = useState(null)
@@ -116,6 +154,21 @@ function Dashboard() {
       setMetricsLoading(false)
     }
   }, [])
+
+  const handleUpdateStatus = async (id, status) => {
+    setUpdatingApptId(id)
+    try {
+      await updateAppointmentStatus(id, status)
+      await Promise.all([
+        fetchAppointments(selectedDate),
+        fetchMetrics()
+      ])
+    } catch (error) {
+      alert('Erro ao atualizar agendamento. Tente novamente.')
+    } finally {
+      setUpdatingApptId(null)
+    }
+  }
 
   useEffect(() => {
     fetchAppointments(selectedDate)
@@ -261,7 +314,12 @@ function Dashboard() {
 
             {/* Lista de agendamentos */}
             {!apptLoading && !apptError && appointments.map((appt) => (
-              <AppointmentCard key={appt.id} appointment={appt} />
+              <AppointmentCard
+                key={appt.id}
+                appointment={appt}
+                onUpdateStatus={handleUpdateStatus}
+                isUpdating={updatingApptId === appt.id}
+              />
             ))}
           </div>
         </section>

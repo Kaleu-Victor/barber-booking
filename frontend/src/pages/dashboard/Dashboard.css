@@ -388,3 +388,68 @@
 .status--pending   { color: #c9a227; }
 .status--done      { color: #5b9bd5; }
 .status--cancelled { color: #b05050; }
+
+/* ── Ações do Card ────────────────────────────────────────────── */
+.appointment-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: flex-start;
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .appointment-card__actions {
+    justify-self: auto;
+    margin-top: 0;
+  }
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: bold;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.action-btn--complete:not(:disabled):hover {
+  border-color: #7fa878;
+  color: #7fa878;
+  background: rgba(127, 168, 120, 0.1);
+}
+
+.action-btn--cancel:not(:disabled):hover {
+  border-color: #b05050;
+  color: #b05050;
+  background: rgba(176, 80, 80, 0.1);
+}
+
+.action-btn--undo {
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.action-btn--undo:not(:disabled):hover {
+  opacity: 1;
+  border-color: #c9a227;
+  color: #c9a227;
+  background: rgba(201, 162, 39, 0.1);
+}
+

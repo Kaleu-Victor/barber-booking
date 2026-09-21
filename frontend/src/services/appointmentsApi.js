@@ -28,3 +28,16 @@ export async function getAppointmentMetrics({ barberId = 1 } = {}) {
   const response = await fetchApi(`/appointments/metrics?${query.toString()}`)
   return response.data
 }
+
+/**
+ * Atualiza o status de um agendamento.
+ * @param {number|string} id 
+ * @param {string} status 
+ */
+export async function updateAppointmentStatus(id, status) {
+  const response = await fetchApi(`/appointments/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  })
+  return response.data
+}

@@ -135,8 +135,38 @@ async function getMetrics(req, res, next) {
   }
 }
 
+async function updateAppointmentStatus(req, res, next) {
+  try {
+    const { id } = req.params
+    const { status } = req.body
+
+    const validStatuses = ['CONFIRMED', 'COMPLETED', 'CANCELLED']
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Status inválido.' })
+    }
+
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: parseInt(id, 10) }
+    })
+
+    if (!appointment) {
+      return res.status(404).json({ error: 'Agendamento não encontrado.' })
+    }
+
+    const updated = await prisma.appointment.update({
+      where: { id: parseInt(id, 10) },
+      data: { status }
+    })
+
+    res.json({ data: updated })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   bookAppointment,
   listAppointments,
-  getMetrics
+  getMetrics,
+  updateAppointmentStatus
 }
