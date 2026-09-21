@@ -27,9 +27,9 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background, #0b0b0b);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
-  border-radius: var(--radius-lg, 22px);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -48,12 +48,12 @@
 
 .schedule-modal__header {
   padding: 24px 20px 20px;
-  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  background: linear-gradient(180deg, rgba(28, 28, 28, 0.5) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(28, 28, 31, 0.5) 0%, transparent 100%);
 }
 
 .schedule-modal__eyebrow {
@@ -130,8 +130,8 @@
 
 .schedule-modal__footer {
   padding: 16px 20px;
-  border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
-  background-color: var(--color-surface, #141414);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -183,22 +183,28 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: var(--color-primary, #c9a227);
-  color: #0b0b0b;
-  border: 1px solid var(--color-primary, #c9a227);
-  border-radius: var(--radius-sm, 8px);
-  font-size: 12px;
+  background-color: var(--color-primary);
+  color: #000;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all var(--transition-fast, 0.2s ease);
+  box-shadow: var(--shadow-glow);
+  transition: all var(--transition-fast);
 }
 
 .schedule-modal__save-button:hover:not(:disabled) {
-  background-color: var(--color-primary-hover, #e0b52f);
-  border-color: var(--color-primary-hover, #e0b52f);
-  transform: translateY(-1px);
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.schedule-modal__save-button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .schedule-modal__save-button:disabled,

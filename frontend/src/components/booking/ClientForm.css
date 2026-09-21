@@ -78,13 +78,13 @@
 }
 
 .client-form__field input:hover {
-  border-color: rgba(201, 162, 39, 0.35);
+  border-color: var(--color-border-primary);
 }
 
 .client-form__field input:focus {
   border-color: var(--color-primary);
   background: var(--color-surface-light);
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.08);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
 }
 
 .client-form__notice {

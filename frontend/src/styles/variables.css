@@ -1,15 +1,19 @@
 :root {
-  --color-background: #0b0b0b;
-  --color-surface: #141414;
-  --color-surface-light: #1c1c1c;
+  --color-background: #0d0d0e;
+  --color-surface: #141416;
+  --color-surface-light: #1c1c1f;
 
   --color-text: #ffffff;
-  --color-text-muted: #a1a1a1;
+  --color-text-muted: #a0a0a8;
+  --color-text-dim: #70707a;
 
-  --color-primary: #c9a227;
-  --color-primary-hover: #e0b52f;
+  --color-primary: #d4af37;
+  --color-primary-hover: #e6c55c;
 
-  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-primary: rgba(212, 175, 55, 0.2);
+
+  --shadow-glow: 0 4px 12px rgba(212, 175, 55, 0.15);
 
   --radius-sm: 8px;
   --radius-md: 14px;

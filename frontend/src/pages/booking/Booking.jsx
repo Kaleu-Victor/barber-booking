@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getAvailability } from '../../services/availabilityApi'
@@ -17,6 +17,10 @@ function Booking() {
   const navigate = useNavigate()
   
   const [isAppointmentsModalOpen, setIsAppointmentsModalOpen] = useState(false)
+
+  const dateRef = useRef(null)
+  const timeRef = useRef(null)
+  const formRef = useRef(null)
 
   const [selectedService, setSelectedService] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
@@ -84,6 +88,23 @@ function Booking() {
   function handleDateSelect(date) {
     setSelectedDate(date)
     setSelectedTime(null)
+    setTimeout(() => {
+      timeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 150)
+  }
+
+  function handleTimeSelect(time) {
+    setSelectedTime(time)
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 150)
+  }
+
+  function handleServiceSelect(service) {
+    setSelectedService(service)
+    setTimeout(() => {
+      dateRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 150)
   }
 
   async function handleConfirm() {
@@ -159,18 +180,20 @@ function Booking() {
 
         <ServiceSelector
           selectedService={selectedService}
-          onSelect={setSelectedService}
+          onSelect={handleServiceSelect}
         />
 
         {selectedService && (
-          <DateSelector
-            selectedDate={selectedDate}
-            onSelect={handleDateSelect}
-          />
+          <div ref={dateRef}>
+            <DateSelector
+              selectedDate={selectedDate}
+              onSelect={handleDateSelect}
+            />
+          </div>
         )}
 
         {selectedDate && (
-          <div className="booking__times-wrapper">
+          <div className="booking__times-wrapper" ref={timeRef}>
             {loadingTimes ? (
               <p>Carregando horários...</p>
             ) : timesError ? (
@@ -179,19 +202,21 @@ function Booking() {
               <TimeSelector
                 times={availableTimes}
                 selectedTime={selectedTime}
-                onSelect={setSelectedTime}
+                onSelect={handleTimeSelect}
               />
             )}
           </div>
         )}
 
         {selectedTime && (
-          <ClientForm
-            name={clientName}
-            whatsapp={clientWhatsapp}
-            onNameChange={setClientName}
-            onWhatsappChange={setClientWhatsapp}
-          />
+          <div ref={formRef}>
+            <ClientForm
+              name={clientName}
+              whatsapp={clientWhatsapp}
+              onNameChange={setClientName}
+              onWhatsappChange={setClientWhatsapp}
+            />
+          </div>
         )}
 
         {selectedTime &&

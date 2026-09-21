@@ -68,17 +68,16 @@
 }
 
 .service-option:hover {
-  border-color: rgba(201, 162, 39, 0.4);
-
+  border-color: var(--color-border-primary);
   background: var(--color-surface-light);
-
   transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
 }
 
 .service-option--selected {
   border-color: var(--color-primary);
-
-  background: rgba(201, 162, 39, 0.07);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: var(--shadow-glow);
 }
 
 .service-option__info {
@@ -144,9 +143,8 @@
 
 .service-option--selected .service-option__check {
   border-color: var(--color-primary);
-
   background: var(--color-primary);
-  color: #0b0b0b;
+  color: #000;
 }
 
 @media (min-width: 768px) {

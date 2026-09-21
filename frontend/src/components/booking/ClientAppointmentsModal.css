@@ -5,10 +5,11 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 16px;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @media (min-width: 768px) {
@@ -120,7 +121,12 @@
 
 .client-modal__submit-btn:not(:disabled):hover {
   transform: translateY(-2px);
-  background: #e6b92f;
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.client-modal__submit-btn:not(:disabled):active {
+  transform: scale(0.98);
 }
 
 .client-modal__error {
@@ -211,7 +217,9 @@
 }
 
 .client-appt-card__cancel-btn:hover:not(:disabled) {
-  background: rgba(176, 80, 80, 0.1);
+  background: rgba(224, 112, 112, 0.1);
+  border-color: #e07070;
+  box-shadow: 0 0 8px rgba(224, 112, 112, 0.15);
 }
 
 .client-appt-card__cancel-btn:disabled {
