@@ -9,11 +9,14 @@ import DateSelector from '../../components/booking/DateSelector'
 import TimeSelector from '../../components/booking/TimeSelector'
 import ClientForm from '../../components/booking/ClientForm'
 import BookingSummary from '../../components/booking/BookingSummary'
+import ClientAppointmentsModal from '../../components/booking/ClientAppointmentsModal'
 
 import './Booking.css'
 
 function Booking() {
   const navigate = useNavigate()
+  
+  const [isAppointmentsModalOpen, setIsAppointmentsModalOpen] = useState(false)
 
   const [selectedService, setSelectedService] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
@@ -101,7 +104,7 @@ function Booking() {
         date: dateStr,
         time: selectedTime.time,
         clientName: clientName,
-        whatsapp: clientWhatsapp
+        whatsapp: clientWhatsapp.replace(/\D/g, '')
       })
 
       navigate('/agendamento/sucesso', {
@@ -144,6 +147,14 @@ function Booking() {
           <p>
             É rápido. Escolha o serviço e siga os próximos passos.
           </p>
+
+          <button 
+            type="button" 
+            className="booking__my-appointments-btn"
+            onClick={() => setIsAppointmentsModalOpen(true)}
+          >
+            <span className="booking__btn-icon">📅</span> Já agendou? Consultar horário
+          </button>
         </section>
 
         <ServiceSelector
@@ -200,6 +211,10 @@ function Booking() {
             </div>
           )}
 
+        <ClientAppointmentsModal 
+          isOpen={isAppointmentsModalOpen}
+          onClose={() => setIsAppointmentsModalOpen(false)}
+        />
       </div>
     </main>
   )

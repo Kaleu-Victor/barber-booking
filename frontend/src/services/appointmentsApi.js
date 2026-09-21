@@ -41,3 +41,26 @@ export async function updateAppointmentStatus(id, status) {
   })
   return response.data
 }
+
+/**
+ * Busca agendamentos futuros de um cliente pelo telefone.
+ * @param {string} phone
+ */
+export async function getAppointmentsByPhone(phone) {
+  const query = new URLSearchParams({ phone })
+  const response = await fetchApi(`/appointments/client?${query.toString()}`)
+  return response.data
+}
+
+/**
+ * Cliente cancela o próprio agendamento (validação simples por telefone).
+ * @param {number|string} id
+ * @param {string} phone
+ */
+export async function clientCancelAppointment(id, phone) {
+  const response = await fetchApi(`/appointments/${id}/client-cancel`, {
+    method: 'PATCH',
+    body: JSON.stringify({ phone })
+  })
+  return response.data
+}

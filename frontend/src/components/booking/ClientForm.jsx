@@ -1,5 +1,14 @@
 import './ClientForm.css'
 
+// Máscara simples para celular (99) 99999-9999
+function formatPhone(value) {
+  const digits = value.replace(/\D/g, '').substring(0, 11)
+  if (digits.length === 0) return ''
+  if (digits.length <= 2) return `(${digits}`
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
+}
+
 function ClientForm({
   name,
   whatsapp,
@@ -45,7 +54,7 @@ function ClientForm({
             type="tel"
             value={whatsapp}
             onChange={(event) =>
-              onWhatsappChange(event.target.value)
+              onWhatsappChange(formatPhone(event.target.value))
             }
             placeholder="(00) 00000-0000"
             autoComplete="tel"

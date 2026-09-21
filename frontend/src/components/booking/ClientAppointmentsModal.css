@@ -1,0 +1,254 @@
+.client-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@media (min-width: 768px) {
+  .client-modal__overlay {
+    align-items: center;
+  }
+}
+
+.client-modal__content {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  padding: 24px 20px;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  .client-modal__content {
+    border-radius: var(--radius-md);
+  }
+}
+
+.client-modal__close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.client-modal__close-btn:hover {
+  color: var(--color-text);
+}
+
+.client-modal__title {
+  font-size: 20px;
+  color: var(--color-text);
+  margin-bottom: 24px;
+}
+
+.client-modal__desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+.client-modal__label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.client-modal__label span {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+}
+
+.client-modal__input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 16px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.client-modal__input:focus {
+  border-color: var(--color-primary);
+}
+
+.client-modal__submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--color-primary);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.client-modal__submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.client-modal__submit-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: #e6b92f;
+}
+
+.client-modal__error {
+  color: #e07070;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.client-modal__empty {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.client-modal__empty p {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  margin-bottom: 24px;
+}
+
+.client-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.client-appt-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  background: var(--color-background);
+}
+
+.client-appt-card--cancelled {
+  opacity: 0.6;
+}
+
+.client-appt-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.client-appt-card__header strong {
+  color: var(--color-primary);
+  font-size: 16px;
+}
+
+.client-appt-card__badge {
+  background: rgba(176, 80, 80, 0.1);
+  color: #e07070;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.client-appt-card__details p {
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.client-appt-card__details .muted {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.client-appt-card__details .price {
+  font-weight: 700;
+  color: var(--color-text);
+  margin-top: 8px;
+}
+
+.client-appt-card__cancel-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid rgba(176, 80, 80, 0.5);
+  color: #e07070;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.client-appt-card__cancel-btn:hover:not(:disabled) {
+  background: rgba(176, 80, 80, 0.1);
+}
+
+.client-appt-card__cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.client-modal__secondary-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  padding: 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.client-modal__secondary-btn:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

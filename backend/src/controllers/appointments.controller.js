@@ -3,6 +3,19 @@ const prisma = require('../lib/prisma')
 
 const DEFAULT_BARBER_ID = 1 // Fixo para MVP
 
+/**
+ * Normaliza um telefone para o formato padrão de 11 dígitos (Brasil).
+ * Remove caracteres não numéricos e o prefixo "55" se estiver presente.
+ */
+function normalizePhone(phone) {
+  if (!phone) return ''
+  let digits = phone.replace(/\D/g, '')
+  if (digits.length === 13 && digits.startsWith('55')) {
+    digits = digits.substring(2)
+  }
+  return digits
+}
+
 async function bookAppointment(req, res, next) {
   try {
     const { serviceId, date, time, clientName, whatsapp } = req.body
@@ -13,7 +26,7 @@ async function bookAppointment(req, res, next) {
       date,
       time,
       clientName,
-      whatsapp
+      whatsapp: normalizePhone(whatsapp)
     })
 
     res.status(201).json({
@@ -164,9 +177,91 @@ async function updateAppointmentStatus(req, res, next) {
   }
 }
 
+async function getClientAppointments(req, res, next) {
+  try {
+    const { phone } = req.query
+    if (!phone) {
+      return res.status(400).json({ error: 'Telefone é obrigatório.' })
+    }
+
+    // Normalizar telefone (apenas números, remover 55)
+    const cleanPhone = normalizePhone(phone)
+
+    const now = new Date()
+
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        client: {
+          whatsapp: cleanPhone
+        },
+        status: 'CONFIRMED',
+        date: { gte: now }
+      },
+      include: {
+        barber: true,
+        service: true
+      },
+      orderBy: {
+        date: 'asc'
+      }
+    })
+
+    res.json({ data: appointments })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function clientCancelAppointment(req, res, next) {
+  try {
+    const { id } = req.params
+    const { phone } = req.body
+
+    if (!phone) {
+      return res.status(400).json({ error: 'Telefone é obrigatório.' })
+    }
+
+    const cleanPhone = normalizePhone(phone)
+
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: parseInt(id, 10) },
+      include: { client: true }
+    })
+
+    if (!appointment) {
+      return res.status(404).json({ error: 'Agendamento não encontrado.' })
+    }
+
+    // Verificar se pertence ao telefone
+    const apptPhone = normalizePhone(appointment.client.whatsapp)
+    if (apptPhone !== cleanPhone) {
+      return res.status(403).json({ error: 'Telefone não corresponde ao agendamento.' })
+    }
+
+    if (appointment.status !== 'CONFIRMED') {
+      return res.status(400).json({ error: 'Agendamento não pode ser cancelado (status inválido).' })
+    }
+
+    if (new Date(appointment.date) < new Date()) {
+      return res.status(400).json({ error: 'Não é possível cancelar agendamentos passados.' })
+    }
+
+    const updated = await prisma.appointment.update({
+      where: { id: parseInt(id, 10) },
+      data: { status: 'CANCELLED' }
+    })
+
+    res.json({ data: updated })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   bookAppointment,
   listAppointments,
   getMetrics,
-  updateAppointmentStatus
+  updateAppointmentStatus,
+  getClientAppointments,
+  clientCancelAppointment
 }
