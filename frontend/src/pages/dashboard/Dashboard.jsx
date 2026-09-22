@@ -7,10 +7,15 @@ import './Dashboard.css'
 
 const BARBER_ID = 1 // MVP fixo
 
-/** Formata um Date (ou string ISO) para "HH:mm" no fuso local */
+/** Formata a hora exata salva sem aplicar conversão de fuso horário local */
 function formatTime(dateValue) {
+  if (typeof dateValue === 'string' && dateValue.includes('T')) {
+    return dateValue.split('T')[1].substring(0, 5)
+  }
   const d = new Date(dateValue)
-  return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  const hours = String(d.getUTCHours()).padStart(2, '0')
+  const minutes = String(d.getUTCMinutes()).padStart(2, '0')
+  return `${hours}:${minutes}`
 }
 
 /** Retorna a string "YYYY-MM-DD" para uma data local */

@@ -122,10 +122,7 @@ async function getMetrics(req, res, next) {
     })
 
     const nextTime = next_appointment
-      ? next_appointment.date.toLocaleTimeString('pt-BR', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
+      ? next_appointment.date.toISOString().split('T')[1].substring(0, 5)
       : null
 
     // 3. Total histórico de atendimentos confirmados/concluídos

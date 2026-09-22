@@ -21,6 +21,7 @@ function Booking() {
   const dateRef = useRef(null)
   const timeRef = useRef(null)
   const formRef = useRef(null)
+  const summaryRef = useRef(null)
 
   const [selectedService, setSelectedService] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
@@ -74,7 +75,19 @@ function Booking() {
         console.log('Parâmetros resolvidos para a API:', { dateStr, serviceId, barberId })
 
         const times = await getAvailability(dateStr, serviceId, barberId)
-        setAvailableTimes(times)
+
+        const todayStr = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD no fuso local
+        if (dateStr === todayStr) {
+          const now = new Date()
+          const currentMinutes = now.getHours() * 60 + now.getMinutes()
+          const filteredTimes = times.filter(t => {
+            const [h, m] = t.time.split(':').map(Number)
+            return (h * 60 + m) > currentMinutes
+          })
+          setAvailableTimes(filteredTimes)
+        } else {
+          setAvailableTimes(times)
+        }
       } catch (err) {
         console.error('ERRO CRÍTICO no try/catch do loadTimes:', err)
         setTimesError('Não foi possível carregar os horários.')
@@ -97,8 +110,17 @@ function Booking() {
     setSelectedTime(time)
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 150)
+    }, 250)
   }
+
+  // Efeito para rolar automaticamente para o resumo quando preencher nome e telefone
+  useEffect(() => {
+    if (selectedTime && clientName.trim() && clientWhatsapp.trim().length >= 14) {
+      setTimeout(() => {
+        summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 250)
+    }
+  }, [selectedTime, clientName, clientWhatsapp])
 
   function handleServiceSelect(service) {
     setSelectedService(service)
@@ -222,7 +244,7 @@ function Booking() {
         {selectedTime &&
           clientName.trim() &&
           clientWhatsapp.trim() && (
-            <div className="booking__summary-wrapper">
+            <div className="booking__summary-wrapper" ref={summaryRef}>
               {submitError && <p className="error" style={{marginBottom: '1rem'}}>{submitError}</p>}
               <BookingSummary
                 service={selectedService}
