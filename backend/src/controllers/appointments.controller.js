@@ -16,6 +16,16 @@ function normalizePhone(phone) {
   return digits
 }
 
+/**
+ * Cria uma data 'naive' baseada no horário atual de Brasília.
+ * Isso garante que as comparações de data funcionem corretamente
+ * independentemente de o servidor rodar em UTC (ex: Vercel) ou localmente.
+ */
+function getLocalNow() {
+  const brTimeStr = new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+  return new Date(brTimeStr)
+}
+
 async function bookAppointment(req, res, next) {
   try {
     const { serviceId, date, time, clientName, whatsapp } = req.body
@@ -91,7 +101,7 @@ async function getMetrics(req, res, next) {
       ? parseInt(req.query.barberId, 10)
       : DEFAULT_BARBER_ID
 
-    const now = new Date()
+    const now = getLocalNow()
 
     // Início e fim do dia atual no fuso local do servidor
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
@@ -184,7 +194,7 @@ async function getClientAppointments(req, res, next) {
     // Normalizar telefone (apenas números, remover 55)
     const cleanPhone = normalizePhone(phone)
 
-    const now = new Date()
+    const now = getLocalNow()
 
     const appointments = await prisma.appointment.findMany({
       where: {
@@ -239,7 +249,8 @@ async function clientCancelAppointment(req, res, next) {
       return res.status(400).json({ error: 'Agendamento não pode ser cancelado (status inválido).' })
     }
 
-    if (new Date(appointment.date) < new Date()) {
+    const now = getLocalNow()
+    if (new Date(appointment.date) < now) {
       return res.status(400).json({ error: 'Não é possível cancelar agendamentos passados.' })
     }
 
