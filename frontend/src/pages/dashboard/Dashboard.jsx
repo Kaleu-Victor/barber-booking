@@ -246,7 +246,7 @@ function Dashboard() {
               type="button"
               className="dashboard__logout"
               onClick={() => setIsProfileModalOpen(true)}
-              style={{ background: 'transparent', color: '#000', border: '1px solid #ccc' }}
+              style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}
             >
               Meu Perfil
             </button>

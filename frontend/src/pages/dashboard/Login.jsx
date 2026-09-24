@@ -31,6 +31,13 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', padding: 0, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}
+        >
+          <span>←</span> Voltar para o início
+        </button>
         <h2>Área do Barbeiro</h2>
         {error && <div className="login-error">{error}</div>}
         <form onSubmit={handleLogin}>
