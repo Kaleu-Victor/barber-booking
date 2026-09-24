@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { fetchApi } from '../../services/api'
 import './ProfileModal.css'
 
 function ProfileModal({ isOpen, onClose, onProfileUpdate }) {
@@ -34,10 +35,9 @@ function ProfileModal({ isOpen, onClose, onProfileUpdate }) {
 
     try {
       const token = localStorage.getItem('barberToken')
-      const response = await fetch('http://localhost:3000/api/admin/profile', {
+      const data = await fetchApi('/admin/profile', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
@@ -48,12 +48,6 @@ function ProfileModal({ isOpen, onClose, onProfileUpdate }) {
           newPassword: newPassword || undefined
         })
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao atualizar perfil')
-      }
 
       localStorage.setItem('barberInfo', JSON.stringify(data))
       setSuccess('Perfil atualizado com sucesso!')

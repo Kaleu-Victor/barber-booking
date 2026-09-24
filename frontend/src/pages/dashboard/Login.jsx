@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { fetchApi } from '../../services/api'
 import './Login.css'
 
 function Login() {
@@ -13,19 +14,10 @@ function Login() {
     setError('')
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const data = await fetchApi('/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ username, password }),
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao fazer login')
-      }
 
       localStorage.setItem('barberToken', data.token)
       localStorage.setItem('barberInfo', JSON.stringify(data.barber))
