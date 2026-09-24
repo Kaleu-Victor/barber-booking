@@ -14,9 +14,6 @@ function Header() {
         </Link>
 
         <nav className="header__nav">
-          <a href="#servicos">Serviços</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#contato">Contato</a>
         </nav>
 
         <Link to="/agendar" className="header__button">

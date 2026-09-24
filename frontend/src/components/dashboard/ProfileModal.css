@@ -1,0 +1,119 @@
+.profile-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.profile-modal {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.profile-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.profile-modal__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.profile-modal__close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.profile-modal__content {
+  padding: 1.5rem;
+}
+
+.profile-modal__form-group {
+  margin-bottom: 1rem;
+}
+
+.profile-modal__form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-modal__form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.profile-modal__message {
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.profile-modal__message.error {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.profile-modal__message.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #eaeaea;
+  margin: 1.5rem 0;
+}
+
+.profile-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.profile-modal__btn-cancel,
+.profile-modal__btn-save {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.profile-modal__btn-cancel {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.profile-modal__btn-save {
+  background-color: #000;
+  color: white;
+}
+
+.profile-modal__btn-save:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}

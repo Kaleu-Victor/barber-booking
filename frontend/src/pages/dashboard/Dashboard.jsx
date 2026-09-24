@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { initialScheduleConfig } from '../../data/scheduleConfig'
 import ScheduleModal from '../../components/dashboard/ScheduleModal'
+import ProfileModal from '../../components/dashboard/ProfileModal'
 import { getAppointments, getAppointmentMetrics, updateAppointmentStatus } from '../../services/appointmentsApi'
 import { getSchedule, updateSchedule } from '../../services/scheduleApi'
 import './Dashboard.css'
@@ -113,9 +115,12 @@ function AppointmentCard({ appointment, onUpdateStatus, isUpdating }) {
 }
 
 function Dashboard() {
+  const navigate = useNavigate()
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const [isScheduleLoading, setIsScheduleLoading] = useState(false)
   const [scheduleConfig, setScheduleConfig]   = useState(initialScheduleConfig)
+  const [barberInfo, setBarberInfo] = useState(JSON.parse(localStorage.getItem('barberInfo') || '{}'))
 
   // ── Data selecionada ──────────────────────────────────────────────────
   const [selectedDate, setSelectedDate] = useState(toLocalDateString(new Date()))
@@ -228,7 +233,7 @@ function Dashboard() {
             </span>
 
             <h1 className="dashboard__title">
-              Olá, <strong>João.</strong>
+              Olá, <strong>{barberInfo.name || 'Barbeiro'}.</strong>
             </h1>
 
             <p className="dashboard__description">
@@ -236,12 +241,27 @@ function Dashboard() {
             </p>
           </div>
 
-          <button
-            type="button"
-            className="dashboard__logout"
-          >
-            Sair
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <button
+              type="button"
+              className="dashboard__logout"
+              onClick={() => setIsProfileModalOpen(true)}
+              style={{ background: 'transparent', color: '#000', border: '1px solid #ccc' }}
+            >
+              Meu Perfil
+            </button>
+            <button
+              type="button"
+              className="dashboard__logout"
+              onClick={() => {
+                localStorage.removeItem('barberToken')
+                localStorage.removeItem('barberInfo')
+                navigate('/login')
+              }}
+            >
+              Sair
+            </button>
+          </div>
         </header>
 
         {/* ── Cards de métricas ────────────────────────────────── */}
@@ -357,6 +377,14 @@ function Dashboard() {
           onClose={() => setIsScheduleModalOpen(false)}
           scheduleConfig={scheduleConfig}
           onSave={handleSaveSchedule}
+        />
+      )}
+
+      {isProfileModalOpen && (
+        <ProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          onProfileUpdate={(updatedInfo) => setBarberInfo(updatedInfo)}
         />
       )}
     </main>

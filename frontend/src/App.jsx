@@ -4,6 +4,8 @@ import Home from './pages/home/Home'
 import Booking from './pages/booking/Booking'
 import BookingSuccess from './pages/booking/BookingSuccess'
 import Dashboard from './pages/dashboard/Dashboard'
+import Login from './pages/dashboard/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
@@ -14,9 +16,14 @@ function App() {
         path="/agendamento/sucesso"
         element={<BookingSuccess />}
       />
+      <Route path="/login" element={<Login />} />
       <Route
         path="/dashboard"
-        element={<Dashboard />}
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   )
